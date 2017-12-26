@@ -1,4 +1,4 @@
-package main.java.com.wkp.simple.util;
+package com.wkp.simple.util;
 
 /**
  * IP/TCP通信 客户端回调接口

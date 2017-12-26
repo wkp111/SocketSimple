@@ -1,4 +1,6 @@
-package main.java.com.wkp.simple.util;
+package com.wkp.simple.util;
+
+import com.wkp.simple.util.ServerCallBack;
 
 import java.io.IOException;
 import java.io.InputStream;

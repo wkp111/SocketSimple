@@ -1,4 +1,4 @@
-package main.java.com.wkp.simple.util;
+package com.wkp.simple.util;
 
 import java.io.InputStream;
 import java.io.OutputStream;
