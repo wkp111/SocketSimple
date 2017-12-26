@@ -1,7 +1,7 @@
-package main.java.com.wkp.simple;
+package com.wkp.simple;
 
-import main.java.com.wkp.simple.util.ServerCallBack;
-import main.java.com.wkp.simple.util.ServerHelper;
+import com.wkp.simple.util.ServerCallBack;
+import com.wkp.simple.util.ServerHelper;
 
 import java.util.HashSet;
 import java.util.Iterator;

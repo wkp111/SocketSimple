@@ -1,8 +1,9 @@
-package main.java.com.wkp.simple;
+package com.wkp.simple;
 
 
-import main.java.com.wkp.simple.util.ClientCallBack;
-import main.java.com.wkp.simple.util.ClientHelper;
+
+import com.wkp.simple.util.ClientCallBack;
+import com.wkp.simple.util.ClientHelper;
 
 import java.util.Scanner;
 
