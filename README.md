@@ -2,7 +2,7 @@
 IP/TCP通信帮助类，主要用于java中利用Socket通信时，服务端与客户端快速创建，支持长连接，支持多服务器、多客户端创建。
 # 集成方式
 > Jar包下载<a href="https://github.com/wkp111/SocketSimple/blob/master/SocketSimple.jar">SocketSimple.jar</a><br/>
-> Maven中央仓库<a href="http://search.maven.org/">http://search.maven.org/</a>搜索
+> Maven中央仓库<a href="http://search.maven.org/">http://search.maven.org/</a>搜索 SocketHelper
 # 代码示例
 ```java
 public class Test {
