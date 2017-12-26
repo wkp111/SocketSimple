@@ -42,10 +42,10 @@ public class ServerHelper {
     private static Executor sExecutor = Executors.newCachedThreadPool();
 
     private ServerHelper() {
-        mServerSocketMap = new ConcurrentHashMap<>();
-        mClientInfoMap = new ConcurrentHashMap<>();
-        mClientAddressMap = new ConcurrentHashMap<>();
-        mServerCallBackMap = new ConcurrentHashMap<>();
+        mServerSocketMap = new ConcurrentHashMap<Integer, ServerSocket>();
+        mClientInfoMap = new ConcurrentHashMap<String, ClientInfo>();
+        mClientAddressMap = new ConcurrentHashMap<Integer, List<String>>();
+        mServerCallBackMap = new ConcurrentHashMap<Integer, ServerCallBack>();
         sExecutor.execute(new CloseRunnable());
     }
 
@@ -161,7 +161,7 @@ public class ServerHelper {
                 try {
                     ServerSocket serverSocket = new ServerSocket(mPort);
                     mServerSocketMap.put(mPort, serverSocket);
-                    List<String> clientAddress = new ArrayList<>();
+                    List<String> clientAddress = new ArrayList<String>();
                     mClientAddressMap.put(mPort, clientAddress);
                     if (sDebug) sLogger.log(Level.SEVERE, "Service has been started. Waiting for clients: ");
                     Socket socket = null;
@@ -203,7 +203,7 @@ public class ServerHelper {
             try {
                 ServerSocket serverSocket = mServerSocketMap.get(mPort);
                 ClientInfo clientInfo = mClientInfoMap.get(mAddress);
-                List<Byte> readData = new ArrayList<>();
+                List<Byte> readData = new ArrayList<Byte>();
                 while (!serverSocket.isClosed() && !clientInfo.mSocket.isClosed()) {
                     readData.clear();
                     byte[] buffer = new byte[1024];

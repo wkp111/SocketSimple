@@ -10,7 +10,7 @@ import java.util.Scanner;
 public class Test2 {
     public static void main(String[] args) {
         //创建客户端2
-        ClientHelper helper = ClientHelper.getInstance(false);
+        final ClientHelper helper = ClientHelper.getInstance(false);
         helper.createClient("127.0.0.1", 9988, new ClientCallBack() {
             @Override
             public void onError(Throwable e) {
@@ -18,7 +18,7 @@ public class Test2 {
             }
 
             @Override
-            public void onConnected(String address, int port) {
+            public void onConnected(final String address, final int port) {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {

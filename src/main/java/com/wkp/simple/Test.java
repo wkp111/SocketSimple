@@ -8,10 +8,10 @@ import java.util.Iterator;
 import java.util.Set;
 
 public class Test {
-    private static Set<String> addresses = new HashSet<>();
+    private static Set<String> addresses = new HashSet<String>();
     public static void main(String[] args) {
         //创建服务器
-        ServerHelper helper = ServerHelper.getInstance(true);
+        final ServerHelper helper = ServerHelper.getInstance(true);
         helper.createServer(9988, new ServerCallBack() {
             @Override
             public void onError(Throwable error) {

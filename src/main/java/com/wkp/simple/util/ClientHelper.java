@@ -34,8 +34,8 @@ public class ClientHelper {
     private ConcurrentMap<String, ClientInfo> mClientInfoMap;  //address-port-clientInfo IP+Port对应客户端信息存储Map
 
     private ClientHelper() {
-        mClientCallBackMap = new ConcurrentHashMap<>();
-        mClientInfoMap = new ConcurrentHashMap<>();
+        mClientCallBackMap = new ConcurrentHashMap<String, ClientCallBack>();
+        mClientInfoMap = new ConcurrentHashMap<String, ClientInfo>();
     }
 
     /**
@@ -157,7 +157,7 @@ public class ClientHelper {
         @Override
         public void run() {
             try {
-                List<Byte> readData = new ArrayList<>();
+                List<Byte> readData = new ArrayList<Byte>();
                 while (!mClientInfo.mSocket.isClosed()) {
                     readData.clear();
                     byte[] buffer = new byte[1024];
