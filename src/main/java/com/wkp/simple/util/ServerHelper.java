@@ -223,6 +223,11 @@ public class ServerHelper {
                         for (int i = 0; i < readData.size(); i++) {
                             result[i] = readData.get(i);
                         }
+                        String s = new String(result);
+                        if ("exit".equals(s)) {
+                            send(mPort,mAddress,result);
+                            return;
+                        }
                         if (sDebug) sLogger.log(Level.SEVERE, "Service has received data! " + mAddress);
                         mCallBack.onReceived(mAddress, result);
                     }
@@ -259,6 +264,11 @@ public class ServerHelper {
                             clientInfo.mOs.write(mData);
                             clientInfo.mOs.write(END_FLAG);
                             clientInfo.mOs.flush();
+                            String s = new String(mData);
+                            if ("exit".equals(s)) {
+                                closeClient(mAddress);
+                                return;
+                            }
                             if (sDebug) sLogger.log(Level.SEVERE, "Service has sent data! " + mAddress);
                             callBack.onSent(mAddress,mData);
                         }else {

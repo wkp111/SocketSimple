@@ -6,10 +6,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
+import java.util.concurrent.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -29,7 +26,7 @@ public class ClientHelper {
     private static boolean sDebug = false;
     private static Logger sLogger = Logger.getLogger("@wkp ");
     private static ClientHelper sClientHelper;
-    private static Executor sExecutor = Executors.newCachedThreadPool();
+    private static ExecutorService sExecutor = Executors.newCachedThreadPool();
     private ConcurrentMap<String, ClientCallBack> mClientCallBackMap;  //address-port-clientCallBack IP+Port对应回调接口存储Map
     private ConcurrentMap<String, ClientInfo> mClientInfoMap;  //address-port-clientInfo IP+Port对应客户端信息存储Map
 
@@ -87,7 +84,26 @@ public class ClientHelper {
      * @param port 端口号
      * @return
      */
-    public synchronized boolean closeClient(String address,int port) {
+    public synchronized void closeClient(String address,int port) {
+        send(address,port,"exit".getBytes());
+    }
+
+    /**
+     * 资源回收，如不回收资源会导致线程池延迟结束
+     */
+    public void recycle() {
+        if (!sExecutor.isShutdown()) {
+            sExecutor.shutdown();
+        }
+    }
+
+    /**
+     * 关闭客户端
+     * @param address IP地址
+     * @param port 端口号
+     * @return
+     */
+    private synchronized void closeClientSocket(String address,int port) {
         try {
             ClientInfo clientInfo = mClientInfoMap.get(address + port);
             if (clientInfo != null) {
@@ -97,11 +113,9 @@ public class ClientHelper {
                 mClientInfoMap.remove(address + port);
             }
             if (sDebug) sLogger.log(Level.INFO, "Client has been removed. Address: " + address + " Port: " + port);
-            return true;
         }catch (Exception e){
             e.printStackTrace();
         }
-        return false;
     }
 
     /**
@@ -177,6 +191,13 @@ public class ClientHelper {
                         for (int i = 0; i < readData.size(); i++) {
                             result[i] = readData.get(i);
                         }
+                        //内部结束标记
+                        String s = new String(result);
+                        if ("exit".equals(s)) {
+                            if (sDebug) sLogger.log(Level.INFO, "Client has closed! Address: " + mAddress + " Port: " + mPort);
+                            closeClientSocket(mAddress, mPort);
+                            return;
+                        }
                         if (sDebug) sLogger.log(Level.INFO, "Client has received data! Address: " + mAddress + " Port: " + mPort);
                         mCallBack.onReceived(mAddress, mPort, result);
                     }
@@ -214,6 +235,11 @@ public class ClientHelper {
                             clientInfo.mOs.write(mData);
                             clientInfo.mOs.write(END_FLAG);
                             clientInfo.mOs.flush();
+                            String s = new String(mData);
+                            if ("exit".equals(s)) {
+                                if (sDebug) sLogger.log(Level.INFO, "Client start to close! Address: " + mAddress + " Port: " + mPort);
+                                return;
+                            }
                             if (sDebug) sLogger.log(Level.INFO, "Client has sent data! Address: " + mAddress + " Port: " + mPort);
                             callBack.onSent(mAddress,mPort,mData);
                         }else {

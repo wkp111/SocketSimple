@@ -1,3 +1,3 @@
-Manifest-Version: 1.0
-Class-Path: libs/socket-helper-1.0.1.jar
+Manifest-Version: 2.0
+Class-Path: SocketHelper-1.0.2.jar
 
